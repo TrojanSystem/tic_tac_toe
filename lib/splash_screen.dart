@@ -18,10 +18,18 @@ class SplashScreen extends StatelessWidget {
             flex: 3,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children:  [
-                XLetter(itemColor: const Color.fromRGBO(254,202,40, 1)),
-                OLetter(innerItemColor: const Color.fromRGBO(255, 77, 77, 1),outerItemColor: Color.fromRGBO(254, 202, 40, 1)),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  width: 50,
+                ),
+                XLetter(itemColor: const Color.fromRGBO(254, 202, 40, 1)),
+                const SizedBox(
+                  width: 50,
+                ),
+                OLetter(
+                    innerItemColor: const Color.fromRGBO(255, 77, 77, 1),
+                    outerItemColor: const Color.fromRGBO(254, 202, 40, 1)),
               ],
             ),
           ),
@@ -43,7 +51,8 @@ class SplashScreen extends StatelessWidget {
                   child: const Center(
                       child: Text(
                     'Start',
-                    style: TextStyle(fontFamily: 'RubikSprayPaint',
+                    style: TextStyle(
+                        fontFamily: 'FredokaOne',
                         color: Color.fromRGBO(255, 77, 77, 1),
                         fontWeight: FontWeight.w900,
                         fontSize: 25),

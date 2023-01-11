@@ -7,6 +7,7 @@ import 'package:tic_tac_toe/data/x_o_data_hub.dart';
 import 'package:tic_tac_toe/data/x_o_model.dart';
 import 'package:tic_tac_toe/player_side/o_letter.dart';
 import 'package:tic_tac_toe/player_side/x_letter.dart';
+import 'package:tic_tac_toe/winner.dart';
 
 class GameBoard extends StatefulWidget {
   GameBoard({super.key, required this.turn});
@@ -18,6 +19,35 @@ class GameBoard extends StatefulWidget {
 }
 
 class _GameBoardState extends State<GameBoard> {
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          'Are you sure?',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: const Text(
+          'Do you want to exit an App',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () =>
+                Navigator.of(context).pop(false), //<-- SEE HERE
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () =>
+                Navigator.of(context).pop(true), // <-- SEE HERE
+            child: const Text('Yes'),
+          ),
+        ],
+        backgroundColor: Colors.black.withOpacity(0.3),
+      ),
+    )) ??
+        false;
+  }
   bool isTapped = false;
   bool isWin = false;
   bool isDrawn = false;
@@ -31,168 +61,148 @@ class _GameBoardState extends State<GameBoard> {
 
     int columnCount = 3;
 
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Turn: ${widget.turn}"),
-        centerTitle: true,
-        brightness: Brightness.dark,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Provider.of<XOModelData>(context, listen: false)
-                  .deleteXODataList();
-            },
-            icon: const Icon(Icons.clear),
+    return WillPopScope(
+     onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: const Color.fromRGBO(34, 50, 76, 1).withOpacity(0.8),
+          elevation: 0,
+          title: const Text(
+            "Tic Tac Toe",
+            style: TextStyle(color: Colors.white),
           ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Center(
-                  child: Text('Turn: ${widget.turn}'),
+          centerTitle: true,
+        ),
+        extendBodyBehindAppBar: true,
+        body: Stack(
+          alignment: Alignment.center,
+          fit: StackFit.expand,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage(
+                    'assets/images/b.jpg',
+                  ),
                 ),
               ),
-              Expanded(
-                flex: 4,
-                child: buildPlayingBoard(w, columnCount, char, gameData),
-              ),
-            ],
-          ),
-          gameData.isEmpty
-              ? Container()
-              : (char.contains(0) &&
-                          char.contains(1) &&
-                          char.contains(2) &&
-                          gameData[char.indexOf(0)].playerSide == 'o' &&
-                          gameData[char.indexOf(1)].playerSide == 'o' &&
-                          gameData[char.indexOf(2)].playerSide == 'o') ||
-                      (char.contains(3) &&
-                          char.contains(4) &&
-                          char.contains(5) &&
-                          gameData[char.indexOf(3)].playerSide == 'o' &&
-                          gameData[char.indexOf(4)].playerSide == 'o' &&
-                          gameData[char.indexOf(5)].playerSide == 'o') ||
-                      (char.contains(6) &&
-                          char.contains(7) &&
-                          char.contains(8) &&
-                          gameData[char.indexOf(6)].playerSide == 'o' &&
-                          gameData[char.indexOf(7)].playerSide == 'o' &&
-                          gameData[char.indexOf(8)].playerSide == 'o') ||
-                      (char.contains(2) &&
-                          char.contains(4) &&
-                          char.contains(6) &&
-                          gameData[char.indexOf(2)].playerSide == 'o' &&
-                          gameData[char.indexOf(4)].playerSide == 'o' &&
-                          gameData[char.indexOf(6)].playerSide == 'o') ||
-                      (char.contains(0) &&
-                          char.contains(4) &&
-                          char.contains(8) &&
-                          gameData[char.indexOf(0)].playerSide == 'o' &&
-                          gameData[char.indexOf(4)].playerSide == 'o' &&
-                          gameData[char.indexOf(8)].playerSide == 'o') ||
-                      (char.contains(0) &&
-                          char.contains(3) &&
-                          char.contains(6) &&
-                          gameData[char.indexOf(0)].playerSide == 'o' &&
-                          gameData[char.indexOf(3)].playerSide == 'o' &&
-                          gameData[char.indexOf(6)].playerSide == 'o') ||
-                      (char.contains(2) &&
-                          char.contains(5) &&
-                          char.contains(8) &&
-                          gameData[char.indexOf(2)].playerSide == 'o' &&
-                          gameData[char.indexOf(5)].playerSide == 'o' &&
-                          gameData[char.indexOf(8)].playerSide == 'o') ||
-                      (char.contains(0) &&
-                          char.contains(1) &&
-                          char.contains(2) &&
-                          gameData[char.indexOf(0)].playerSide == 'x' &&
-                          gameData[char.indexOf(1)].playerSide == 'x' &&
-                          gameData[char.indexOf(2)].playerSide == 'x') ||
-                      (char.contains(3) &&
-                          char.contains(4) &&
-                          char.contains(5) &&
-                          gameData[char.indexOf(3)].playerSide == 'x' &&
-                          gameData[char.indexOf(4)].playerSide == 'x' &&
-                          gameData[char.indexOf(5)].playerSide == 'x') ||
-                      (char.contains(6) &&
-                          char.contains(7) &&
-                          char.contains(8) &&
-                          gameData[char.indexOf(6)].playerSide == 'x' &&
-                          gameData[char.indexOf(7)].playerSide == 'x' &&
-                          gameData[char.indexOf(8)].playerSide == 'x') ||
-                      (char.contains(2) &&
-                          char.contains(4) &&
-                          char.contains(6) &&
-                          gameData[char.indexOf(2)].playerSide == 'x' &&
-                          gameData[char.indexOf(4)].playerSide == 'x' &&
-                          gameData[char.indexOf(6)].playerSide == 'x') ||
-                      (char.contains(0) &&
-                          char.contains(4) &&
-                          char.contains(8) &&
-                          gameData[char.indexOf(0)].playerSide == 'x' &&
-                          gameData[char.indexOf(4)].playerSide == 'x' &&
-                          gameData[char.indexOf(8)].playerSide == 'x') ||
-                      (char.contains(0) &&
-                          char.contains(3) &&
-                          char.contains(6) &&
-                          gameData[char.indexOf(0)].playerSide == 'x' &&
-                          gameData[char.indexOf(3)].playerSide == 'x' &&
-                          gameData[char.indexOf(6)].playerSide == 'x') ||
-                      (char.contains(2) &&
-                          char.contains(5) &&
-                          char.contains(8) &&
-                          gameData[char.indexOf(2)].playerSide == 'x' &&
-                          gameData[char.indexOf(5)].playerSide == 'x' &&
-                          gameData[char.indexOf(8)].playerSide == 'x')
-                  ? Container(
-                      color: Colors.grey.withOpacity(0.5),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Lottie.asset('assets/images/rewards.json',width: 250,),
-                            const Text(
-                              'GameOver',
-                              style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 3,
-                              ),
-                            ),
-                            Text(
-                              '${widget.turn} wins',
-                              style: const TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 3,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  : gameData.length > 7
-                      ? Container(
-                          color: Colors.grey.withOpacity(0.5),
-                          child: const Center(
-                            child: Text(
-                              'Game Drawn',
-                              style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 3,
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container()
-        ],
+            ),
+            buildPlayerBoard(w, columnCount, char, gameData, context),
+          ],
+        ),
       ),
+    );
+  }
+
+  Stack buildPlayerBoard(double w, int columnCount, List<int> char,
+      List<XOModel> gameData, BuildContext context) {
+    return Stack(
+      children: [
+        Column(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(),
+            ),
+            Expanded(
+              flex: 4,
+              child: buildPlayingBoard(w, columnCount, char, gameData),
+            ),
+          ],
+        ),
+        gameData.isEmpty
+            ? Container()
+            : (char.contains(0) &&
+                        char.contains(1) &&
+                        char.contains(2) &&
+                        gameData[char.indexOf(0)].playerSide == 'o' &&
+                        gameData[char.indexOf(1)].playerSide == 'o' &&
+                        gameData[char.indexOf(2)].playerSide == 'o') ||
+                    (char.contains(3) &&
+                        char.contains(4) &&
+                        char.contains(5) &&
+                        gameData[char.indexOf(3)].playerSide == 'o' &&
+                        gameData[char.indexOf(4)].playerSide == 'o' &&
+                        gameData[char.indexOf(5)].playerSide == 'o') ||
+                    (char.contains(6) &&
+                        char.contains(7) &&
+                        char.contains(8) &&
+                        gameData[char.indexOf(6)].playerSide == 'o' &&
+                        gameData[char.indexOf(7)].playerSide == 'o' &&
+                        gameData[char.indexOf(8)].playerSide == 'o') ||
+                    (char.contains(2) &&
+                        char.contains(4) &&
+                        char.contains(6) &&
+                        gameData[char.indexOf(2)].playerSide == 'o' &&
+                        gameData[char.indexOf(4)].playerSide == 'o' &&
+                        gameData[char.indexOf(6)].playerSide == 'o') ||
+                    (char.contains(0) &&
+                        char.contains(4) &&
+                        char.contains(8) &&
+                        gameData[char.indexOf(0)].playerSide == 'o' &&
+                        gameData[char.indexOf(4)].playerSide == 'o' &&
+                        gameData[char.indexOf(8)].playerSide == 'o') ||
+                    (char.contains(0) &&
+                        char.contains(3) &&
+                        char.contains(6) &&
+                        gameData[char.indexOf(0)].playerSide == 'o' &&
+                        gameData[char.indexOf(3)].playerSide == 'o' &&
+                        gameData[char.indexOf(6)].playerSide == 'o') ||
+                    (char.contains(2) &&
+                        char.contains(5) &&
+                        char.contains(8) &&
+                        gameData[char.indexOf(2)].playerSide == 'o' &&
+                        gameData[char.indexOf(5)].playerSide == 'o' &&
+                        gameData[char.indexOf(8)].playerSide == 'o') ||
+                    (char.contains(0) &&
+                        char.contains(1) &&
+                        char.contains(2) &&
+                        gameData[char.indexOf(0)].playerSide == 'x' &&
+                        gameData[char.indexOf(1)].playerSide == 'x' &&
+                        gameData[char.indexOf(2)].playerSide == 'x') ||
+                    (char.contains(3) &&
+                        char.contains(4) &&
+                        char.contains(5) &&
+                        gameData[char.indexOf(3)].playerSide == 'x' &&
+                        gameData[char.indexOf(4)].playerSide == 'x' &&
+                        gameData[char.indexOf(5)].playerSide == 'x') ||
+                    (char.contains(6) &&
+                        char.contains(7) &&
+                        char.contains(8) &&
+                        gameData[char.indexOf(6)].playerSide == 'x' &&
+                        gameData[char.indexOf(7)].playerSide == 'x' &&
+                        gameData[char.indexOf(8)].playerSide == 'x') ||
+                    (char.contains(2) &&
+                        char.contains(4) &&
+                        char.contains(6) &&
+                        gameData[char.indexOf(2)].playerSide == 'x' &&
+                        gameData[char.indexOf(4)].playerSide == 'x' &&
+                        gameData[char.indexOf(6)].playerSide == 'x') ||
+                    (char.contains(0) &&
+                        char.contains(4) &&
+                        char.contains(8) &&
+                        gameData[char.indexOf(0)].playerSide == 'x' &&
+                        gameData[char.indexOf(4)].playerSide == 'x' &&
+                        gameData[char.indexOf(8)].playerSide == 'x') ||
+                    (char.contains(0) &&
+                        char.contains(3) &&
+                        char.contains(6) &&
+                        gameData[char.indexOf(0)].playerSide == 'x' &&
+                        gameData[char.indexOf(3)].playerSide == 'x' &&
+                        gameData[char.indexOf(6)].playerSide == 'x') ||
+                    (char.contains(2) &&
+                        char.contains(5) &&
+                        char.contains(8) &&
+                        gameData[char.indexOf(2)].playerSide == 'x' &&
+                        gameData[char.indexOf(5)].playerSide == 'x' &&
+                        gameData[char.indexOf(8)].playerSide == 'x')
+                ? buildWinNotifier(widget.turn, context,'star-3.json','WIN',true,85.0)
+                : gameData.length > 7
+                    ? buildWinNotifier(widget.turn, context,'drawn.json','DRAWN',false,120.0)
+                    : Container()
+      ],
     );
   }
 
@@ -283,7 +293,7 @@ class _GameBoardState extends State<GameBoard> {
                 margin: EdgeInsets.only(
                     bottom: w / 30, left: w / 60, right: w / 60),
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: const Color.fromRGBO(70, 97, 113, 1),
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   boxShadow: [
                     BoxShadow(
@@ -327,14 +337,13 @@ class _GameBoardState extends State<GameBoard> {
                   playerIcon: widget.turn);
               Provider.of<XOModelData>(context, listen: false)
                   .addXODataList(xoData);
-              final test =
-                  Provider.of<XOModelData>(context, listen: false).xoDataList;
+
             },
             child: Container(
               margin:
                   EdgeInsets.only(bottom: w / 30, left: w / 60, right: w / 60),
               decoration: BoxDecoration(
-                color: Colors.red,
+                color: const Color.fromRGBO(70, 97, 113, 1),
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
                 boxShadow: [
                   BoxShadow(
@@ -346,10 +355,11 @@ class _GameBoardState extends State<GameBoard> {
               ),
               child: Center(
                 child: turn == 'x'
-                    ? XLetter(itemColor: Colors.blue)
+                    ? XLetter(itemColor: const Color.fromRGBO(228, 92, 209, 1))
                     : OLetter(
-                        innerItemColor: const Color.fromRGBO(254, 202, 40, 1),
-                        outerItemColor: Colors.blue),
+                        innerItemColor: const Color.fromRGBO(70, 97, 113, 1),
+                        outerItemColor: const Color.fromRGBO(74, 156, 199, 1),
+                      ),
               ),
             ),
           ),

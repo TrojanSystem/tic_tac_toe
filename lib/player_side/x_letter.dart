@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class XLetter extends StatelessWidget {
-   XLetter({required this.itemColor});
-Color itemColor;
+  XLetter({required this.itemColor});
+
+  Color itemColor;
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -12,12 +14,11 @@ Color itemColor;
             angle: -40,
             child: Container(
               decoration: BoxDecoration(
-                color:itemColor,
-                borderRadius: BorderRadius.circular(8)
-              ),
+                  border: Border.all(color: Colors.black, width: 2),
+                  color: itemColor,
+                  borderRadius: BorderRadius.circular(8)),
               width: 30,
               height: 140,
-             
             ),
           ),
           Transform.rotate(
@@ -26,9 +27,9 @@ Color itemColor;
               width: 30,
               height: 140,
               decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 2),
                   color: itemColor,
-                  borderRadius: BorderRadius.circular(8)
-              ),
+                  borderRadius: BorderRadius.circular(8)),
             ),
           ),
         ],
