@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/player_side/x_letter.dart';
 
-import 'choose_player.dart';
+import 'brain/choose_player.dart';
 import 'player_side/o_letter.dart';
 
 class SplashScreen extends StatelessWidget {

@@ -9,6 +9,8 @@ import 'package:tic_tac_toe/player_side/o_letter.dart';
 import 'package:tic_tac_toe/player_side/x_letter.dart';
 import 'package:tic_tac_toe/winner.dart';
 
+import '../winner_board.dart';
+
 class GameBoard extends StatefulWidget {
   GameBoard({super.key, required this.turn});
 

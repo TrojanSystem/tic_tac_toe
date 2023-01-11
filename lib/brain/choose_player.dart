@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tic_tac_toe/data/x_o_model.dart';
-import 'package:tic_tac_toe/game_board.dart';
+import 'package:tic_tac_toe/brain/game_board.dart';
 import 'package:tic_tac_toe/player_side/o_letter.dart';
 import 'package:tic_tac_toe/player_side/x_letter.dart';
 import 'package:tic_tac_toe/data/x_o_data_hub.dart';
