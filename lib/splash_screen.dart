@@ -43,7 +43,7 @@ class SplashScreen extends StatelessWidget {
                   child: const Center(
                       child: Text(
                     'Start',
-                    style: TextStyle(
+                    style: TextStyle(fontFamily: 'RubikSprayPaint',
                         color: Color.fromRGBO(255, 77, 77, 1),
                         fontWeight: FontWeight.w900,
                         fontSize: 25),

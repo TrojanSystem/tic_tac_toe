@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
@@ -18,6 +19,8 @@ class GameBoard extends StatefulWidget {
 
 class _GameBoardState extends State<GameBoard> {
   bool isTapped = false;
+  bool isWin = false;
+  bool isDrawn = false;
   late int current_index = -1;
 
   @override
@@ -28,6 +31,7 @@ class _GameBoardState extends State<GameBoard> {
 
     int columnCount = 3;
 
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Turn: ${widget.turn}"),
@@ -36,115 +40,209 @@ class _GameBoardState extends State<GameBoard> {
         actions: [
           IconButton(
             onPressed: () {
-              Provider.of<XOModelData>(context,listen: false).deleteXODataList();
+              Provider.of<XOModelData>(context, listen: false)
+                  .deleteXODataList();
             },
-            icon: Icon(Icons.clear),
+            icon: const Icon(Icons.clear),
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: Text('Turn: ${widget.turn}'),
-            ),
+          Column(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Center(
+                  child: Text('Turn: ${widget.turn}'),
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: buildPlayingBoard(w, columnCount, char, gameData),
+              ),
+            ],
           ),
-          Expanded(
-            flex: 4,
-            child: buildPlayingBoard(w, columnCount, char, gameData),
-          ),
+          gameData.isEmpty
+              ? Container()
+              : (char.contains(0) &&
+                          char.contains(1) &&
+                          char.contains(2) &&
+                          gameData[char.indexOf(0)].playerSide == 'o' &&
+                          gameData[char.indexOf(1)].playerSide == 'o' &&
+                          gameData[char.indexOf(2)].playerSide == 'o') ||
+                      (char.contains(3) &&
+                          char.contains(4) &&
+                          char.contains(5) &&
+                          gameData[char.indexOf(3)].playerSide == 'o' &&
+                          gameData[char.indexOf(4)].playerSide == 'o' &&
+                          gameData[char.indexOf(5)].playerSide == 'o') ||
+                      (char.contains(6) &&
+                          char.contains(7) &&
+                          char.contains(8) &&
+                          gameData[char.indexOf(6)].playerSide == 'o' &&
+                          gameData[char.indexOf(7)].playerSide == 'o' &&
+                          gameData[char.indexOf(8)].playerSide == 'o') ||
+                      (char.contains(2) &&
+                          char.contains(4) &&
+                          char.contains(6) &&
+                          gameData[char.indexOf(2)].playerSide == 'o' &&
+                          gameData[char.indexOf(4)].playerSide == 'o' &&
+                          gameData[char.indexOf(6)].playerSide == 'o') ||
+                      (char.contains(0) &&
+                          char.contains(4) &&
+                          char.contains(8) &&
+                          gameData[char.indexOf(0)].playerSide == 'o' &&
+                          gameData[char.indexOf(4)].playerSide == 'o' &&
+                          gameData[char.indexOf(8)].playerSide == 'o') ||
+                      (char.contains(0) &&
+                          char.contains(3) &&
+                          char.contains(6) &&
+                          gameData[char.indexOf(0)].playerSide == 'o' &&
+                          gameData[char.indexOf(3)].playerSide == 'o' &&
+                          gameData[char.indexOf(6)].playerSide == 'o') ||
+                      (char.contains(2) &&
+                          char.contains(5) &&
+                          char.contains(8) &&
+                          gameData[char.indexOf(2)].playerSide == 'o' &&
+                          gameData[char.indexOf(5)].playerSide == 'o' &&
+                          gameData[char.indexOf(8)].playerSide == 'o') ||
+                      (char.contains(0) &&
+                          char.contains(1) &&
+                          char.contains(2) &&
+                          gameData[char.indexOf(0)].playerSide == 'x' &&
+                          gameData[char.indexOf(1)].playerSide == 'x' &&
+                          gameData[char.indexOf(2)].playerSide == 'x') ||
+                      (char.contains(3) &&
+                          char.contains(4) &&
+                          char.contains(5) &&
+                          gameData[char.indexOf(3)].playerSide == 'x' &&
+                          gameData[char.indexOf(4)].playerSide == 'x' &&
+                          gameData[char.indexOf(5)].playerSide == 'x') ||
+                      (char.contains(6) &&
+                          char.contains(7) &&
+                          char.contains(8) &&
+                          gameData[char.indexOf(6)].playerSide == 'x' &&
+                          gameData[char.indexOf(7)].playerSide == 'x' &&
+                          gameData[char.indexOf(8)].playerSide == 'x') ||
+                      (char.contains(2) &&
+                          char.contains(4) &&
+                          char.contains(6) &&
+                          gameData[char.indexOf(2)].playerSide == 'x' &&
+                          gameData[char.indexOf(4)].playerSide == 'x' &&
+                          gameData[char.indexOf(6)].playerSide == 'x') ||
+                      (char.contains(0) &&
+                          char.contains(4) &&
+                          char.contains(8) &&
+                          gameData[char.indexOf(0)].playerSide == 'x' &&
+                          gameData[char.indexOf(4)].playerSide == 'x' &&
+                          gameData[char.indexOf(8)].playerSide == 'x') ||
+                      (char.contains(0) &&
+                          char.contains(3) &&
+                          char.contains(6) &&
+                          gameData[char.indexOf(0)].playerSide == 'x' &&
+                          gameData[char.indexOf(3)].playerSide == 'x' &&
+                          gameData[char.indexOf(6)].playerSide == 'x') ||
+                      (char.contains(2) &&
+                          char.contains(5) &&
+                          char.contains(8) &&
+                          gameData[char.indexOf(2)].playerSide == 'x' &&
+                          gameData[char.indexOf(5)].playerSide == 'x' &&
+                          gameData[char.indexOf(8)].playerSide == 'x')
+                  ? Container(
+                      color: Colors.grey.withOpacity(0.5),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Lottie.asset('assets/images/rewards.json',width: 250,),
+                            const Text(
+                              'GameOver',
+                              style: TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 3,
+                              ),
+                            ),
+                            Text(
+                              '${widget.turn} wins',
+                              style: const TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 3,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : gameData.length > 7
+                      ? Container(
+                          color: Colors.grey.withOpacity(0.5),
+                          child: const Center(
+                            child: Text(
+                              'Game Drawn',
+                              style: TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 3,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container()
         ],
       ),
     );
   }
 
-  Stack buildPlayingBoard(double w, int columnCount, data, gameData) {
-    return Stack(
-      children: [
-        AnimationLimiter(
-          child: GridView.count(
-            physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            padding: EdgeInsets.all(w / 60),
-            crossAxisCount: columnCount,
-            children: [
-              data.contains(0)
-                  ? buildPressedPad(
-                      columnCount,
-                      w,
-                      !data.contains(0)
-                          ? ''
-                          : gameData[data.indexOf(0)].playerSide)
-                  : buildPad(columnCount, w, 0),
-              data.contains(1)
-                  ? buildPressedPad(
-                      columnCount,
-                      w,
-                      !data.contains(1)
-                          ? ''
-                          : gameData[data.indexOf(1)].playerSide)
-                  : buildPad(columnCount, w, 1),
-              data.contains(2)
-                  ? buildPressedPad(
-                      columnCount,
-                      w,
-                      !data.contains(2)
-                          ? ''
-                          : gameData[data.indexOf(2)].playerSide)
-                  : buildPad(columnCount, w, 2),
-              data.contains(3)
-                  ? buildPressedPad(
-                      columnCount,
-                      w,
-                      !data.contains(3)
-                          ? ''
-                          : gameData[data.indexOf(3)].playerSide)
-                  : buildPad(columnCount, w, 3),
-              data.contains(4)
-                  ? buildPressedPad(
-                      columnCount,
-                      w,
-                      !data.contains(4)
-                          ? ''
-                          : gameData[data.indexOf(4)].playerSide)
-                  : buildPad(columnCount, w, 4),
-              data.contains(5)
-                  ? buildPressedPad(
-                      columnCount,
-                      w,
-                      !data.contains(5)
-                          ? ''
-                          : gameData[data.indexOf(5)].playerSide)
-                  : buildPad(columnCount, w, 5),
-              data.contains(6)
-                  ? buildPressedPad(
-                      columnCount,
-                      w,
-                      !data.contains(6)
-                          ? ''
-                          : gameData[data.indexOf(6)].playerSide)
-                  : buildPad(columnCount, w, 6),
-              data.contains(7)
-                  ? buildPressedPad(
-                      columnCount,
-                      w,
-                      !data.contains(7)
-                          ? ''
-                          : gameData[data.indexOf(7)].playerSide)
-                  : buildPad(columnCount, w, 7),
-              data.contains(8)
-                  ? buildPressedPad(
-                      columnCount,
-                      w,
-                      !data.contains(8)
-                          ? ''
-                          : gameData[data.indexOf(8)].playerSide)
-                  : buildPad(columnCount, w, 8),
-            ],
-          ),
-        ),
-      ],
+  AnimationLimiter buildPlayingBoard(
+      double w, int columnCount, data, gameData) {
+    return AnimationLimiter(
+      child: GridView.count(
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
+        padding: EdgeInsets.all(w / 60),
+        crossAxisCount: columnCount,
+        children: [
+          data.contains(0)
+              ? buildPressedPad(columnCount, w,
+                  !data.contains(0) ? '' : gameData[data.indexOf(0)].playerSide)
+              : buildPad(columnCount, w, 0),
+          data.contains(1)
+              ? buildPressedPad(columnCount, w,
+                  !data.contains(1) ? '' : gameData[data.indexOf(1)].playerSide)
+              : buildPad(columnCount, w, 1),
+          data.contains(2)
+              ? buildPressedPad(columnCount, w,
+                  !data.contains(2) ? '' : gameData[data.indexOf(2)].playerSide)
+              : buildPad(columnCount, w, 2),
+          data.contains(3)
+              ? buildPressedPad(columnCount, w,
+                  !data.contains(3) ? '' : gameData[data.indexOf(3)].playerSide)
+              : buildPad(columnCount, w, 3),
+          data.contains(4)
+              ? buildPressedPad(columnCount, w,
+                  !data.contains(4) ? '' : gameData[data.indexOf(4)].playerSide)
+              : buildPad(columnCount, w, 4),
+          data.contains(5)
+              ? buildPressedPad(columnCount, w,
+                  !data.contains(5) ? '' : gameData[data.indexOf(5)].playerSide)
+              : buildPad(columnCount, w, 5),
+          data.contains(6)
+              ? buildPressedPad(columnCount, w,
+                  !data.contains(6) ? '' : gameData[data.indexOf(6)].playerSide)
+              : buildPad(columnCount, w, 6),
+          data.contains(7)
+              ? buildPressedPad(columnCount, w,
+                  !data.contains(7) ? '' : gameData[data.indexOf(7)].playerSide)
+              : buildPad(columnCount, w, 7),
+          data.contains(8)
+              ? buildPressedPad(columnCount, w,
+                  !data.contains(8) ? '' : gameData[data.indexOf(8)].playerSide)
+              : buildPad(columnCount, w, 8),
+        ],
+      ),
     );
   }
 
@@ -161,6 +259,7 @@ class _GameBoardState extends State<GameBoard> {
               onTap: () {
                 setState(() {
                   current_index = index;
+
                   if (widget.turn == 'x') {
                     setState(() {
                       widget.turn = 'o';
