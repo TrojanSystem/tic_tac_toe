@@ -5,9 +5,9 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import 'package:tic_tac_toe/data/x_o_data_hub.dart';
 import 'package:tic_tac_toe/data/x_o_model.dart';
+import 'package:tic_tac_toe/front_screen.dart';
 import 'package:tic_tac_toe/player_side/o_letter.dart';
 import 'package:tic_tac_toe/player_side/x_letter.dart';
-
 
 import '../winner_board.dart';
 
@@ -23,33 +23,43 @@ class GameBoard extends StatefulWidget {
 class _GameBoardState extends State<GameBoard> {
   Future<bool> _onWillPop() async {
     return (await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(
-          'Are you sure?',
-          style: TextStyle(color: Colors.white),
-        ),
-        content: const Text(
-          'Do you want to exit an App',
-          style: TextStyle(color: Colors.white),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () =>
-                Navigator.of(context).pop(false), //<-- SEE HERE
-            child: const Text('No'),
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text(
+              'Are you sure?',
+              style: TextStyle(color: Colors.white),
+            ),
+            content: const Text(
+              'Do you want to exit an App',
+              style: TextStyle(color: Colors.white),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context).pop(false), //<-- SEE HERE
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    int count = 0;
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (ctx) => const FrontScreen(),
+                      ),
+                    );
+                    Provider.of<XOModelData>(context,listen: false).loader();
+                  });
+                },
+                child: const Text('Yes'),
+              ),
+            ],
+            backgroundColor: Colors.black.withOpacity(0.3),
           ),
-          TextButton(
-            onPressed: () =>
-                Navigator.of(context).pop(true), // <-- SEE HERE
-            child: const Text('Yes'),
-          ),
-        ],
-        backgroundColor: Colors.black.withOpacity(0.3),
-      ),
-    )) ??
+        )) ??
         false;
   }
+
   bool isTapped = false;
   bool isWin = false;
   bool isDrawn = false;
@@ -64,7 +74,7 @@ class _GameBoardState extends State<GameBoard> {
     int columnCount = 3;
 
     return WillPopScope(
-     onWillPop: _onWillPop,
+      onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -93,6 +103,45 @@ class _GameBoardState extends State<GameBoard> {
             ),
             buildPlayerBoard(w, columnCount, char, gameData, context),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text(
+                  'Are you sure?',
+                  style: TextStyle(color: Colors.white),
+                ),
+                content: const Text(
+                  'Do you want to restart the game?',
+                  style: TextStyle(color: Colors.white),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () =>
+                        Navigator.of(context).pop(false), //<-- SEE HERE
+                    child: const Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Provider.of<XOModelData>(context, listen: false)
+                          .deleteXODataList();
+                      Navigator.of(context).pop(false);
+                    },
+                    // <-- SEE HERE
+                    child: const Text('Yes'),
+                  ),
+                ],
+                backgroundColor: Colors.black.withOpacity(0.3),
+              ),
+            );
+          },
+          backgroundColor: const Color.fromRGBO(74, 156, 199, 1),
+          child: const Icon(
+            Icons.refresh_outlined,
+            size: 35,
+          ),
         ),
       ),
     );
@@ -200,9 +249,11 @@ class _GameBoardState extends State<GameBoard> {
                         gameData[char.indexOf(2)].playerSide == 'x' &&
                         gameData[char.indexOf(5)].playerSide == 'x' &&
                         gameData[char.indexOf(8)].playerSide == 'x')
-                ? buildWinNotifier(widget.turn, context,'star-3.json','WIN',true,85.0)
+                ? buildWinNotifier(
+                    widget.turn, context, 'star-3.json', 'WIN', true, 85.0)
                 : gameData.length > 7
-                    ? buildWinNotifier(widget.turn, context,'drawn.json','DRAWN',false,120.0)
+                    ? buildWinNotifier(widget.turn, context, 'drawn.json',
+                        'DRAWN', false, 120.0)
                     : Container()
       ],
     );
@@ -339,7 +390,6 @@ class _GameBoardState extends State<GameBoard> {
                   playerIcon: widget.turn);
               Provider.of<XOModelData>(context, listen: false)
                   .addXODataList(xoData);
-
             },
             child: Container(
               margin:

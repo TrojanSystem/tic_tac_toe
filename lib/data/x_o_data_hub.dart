@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/data/x_o_database.dart';
 import 'package:tic_tac_toe/data/x_o_model.dart';
 
-
 class XOModelData extends ChangeNotifier {
-
   XODATABASE db = XODATABASE();
   bool _isLoading = true;
-
+  bool isLoaded = false;
+  String selectedSide = '';
   List<XOModel> _xoDataList = [];
 
   List<XOModel> get xoDataList => _xoDataList;
@@ -19,6 +18,16 @@ class XOModelData extends ChangeNotifier {
     notifyListeners();
     _xoDataList = await db.getTasks();
     _isLoading = false;
+    notifyListeners();
+  }
+
+  void loader() {
+    isLoaded = true;
+    notifyListeners();
+  }
+
+  void choosedSide(selected) {
+    selectedSide = selected;
     notifyListeners();
   }
 
@@ -39,6 +48,4 @@ class XOModelData extends ChangeNotifier {
     await loadXODataList();
     notifyListeners();
   }
-
-
 }

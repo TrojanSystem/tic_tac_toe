@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:tic_tac_toe/splash_screen.dart';
+
 
 import 'data/x_o_data_hub.dart';
+import 'front_screen.dart';
 
 Center buildWinNotifier(whoWin, context, lottie, isAwin, isShowing, height) {
   return Center(
@@ -38,13 +39,13 @@ Center buildWinNotifier(whoWin, context, lottie, isAwin, isShowing, height) {
                     children: [
                       isShowing
                           ? Text(
-                        whoWin,
-                        style: const TextStyle(
-                            fontFamily: 'FredokaOne',
-                            color: Colors.white,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 30),
-                      )
+                              whoWin,
+                              style: const TextStyle(
+                                  fontFamily: 'FredokaOne',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 30),
+                            )
                           : Container(),
                       Text(
                         isAwin,
@@ -65,11 +66,14 @@ Center buildWinNotifier(whoWin, context, lottie, isAwin, isShowing, height) {
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (ctx) => const SplashScreen(),
+                      builder: (ctx) => const FrontScreen(),
                     ),
                   );
+                  Provider.of<XOModelData>(context, listen: false)
+                      .deleteXODataList();
+                  Provider.of<XOModelData>(context,listen: false).loader();
                 },
                 child: Container(
                   alignment: Alignment.bottomCenter,
@@ -81,7 +85,7 @@ Center buildWinNotifier(whoWin, context, lottie, isAwin, isShowing, height) {
                     width: 50,
                     height: 50,
                     child:
-                    const Icon(Icons.menu, color: Colors.white, size: 35),
+                        const Icon(Icons.menu, color: Colors.white, size: 35),
                   ),
                 ),
               ),

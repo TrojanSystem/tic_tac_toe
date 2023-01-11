@@ -19,12 +19,24 @@ class _ChoosePlayerState extends State<ChoosePlayer> {
 
   @override
   Widget build(BuildContext context) {
-
-
-    return Scaffold(
-          backgroundColor: const Color.fromRGBO(255, 77, 77, 1),
+    final side = Provider.of<XOModelData>(context);
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage('assets/images/splash.jpg'),
+            ),
+          ),
+        ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
           body: Column(
             children: [
+              const SizedBox(
+                height: 50,
+              ),
               const Padding(
                 padding: EdgeInsets.only(top: 28.0),
                 child: Text(
@@ -44,14 +56,16 @@ class _ChoosePlayerState extends State<ChoosePlayer> {
                       setState(() {
                         _isTapped = !_isTapped;
                         if (_isTapped) {
-                          selectedSide = 'x';
+                          selectedSide = 'o';
+                          side.choosedSide('x');
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) => GameBoard(turn: selectedSide),
                             ),
                           );
                         } else {
-                          selectedSide = 'x';
+                          selectedSide = 'o';
+                          side.choosedSide('x');
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) => GameBoard(turn: selectedSide),
@@ -59,12 +73,10 @@ class _ChoosePlayerState extends State<ChoosePlayer> {
                           );
                         }
                       });
-
-
                     },
                     child: _isTapped
                         ? XLetter(
-                            itemColor: const Color.fromRGBO(254, 202, 40, 1),
+                            itemColor: const Color.fromRGBO(228, 92, 209, 1),
                           )
                         : Container(
                             decoration: BoxDecoration(
@@ -72,7 +84,7 @@ class _ChoosePlayerState extends State<ChoosePlayer> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: XLetter(
-                              itemColor: const Color.fromRGBO(255, 77, 77, 1),
+                              itemColor: const Color.fromRGBO(228, 92, 209, 1),
                             ),
                           ),
                   ),
@@ -86,14 +98,16 @@ class _ChoosePlayerState extends State<ChoosePlayer> {
                       setState(() {
                         _isTapped = !_isTapped;
                         if (_isTapped) {
-                          selectedSide = 'o';
+                          selectedSide = 'x';
+                          side.choosedSide('o');
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) => GameBoard(turn: selectedSide),
                             ),
                           );
                         } else {
-                          selectedSide = 'o';
+                          selectedSide = 'x';
+                          side.choosedSide('o');
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) => GameBoard(turn: selectedSide),
@@ -101,8 +115,6 @@ class _ChoosePlayerState extends State<ChoosePlayer> {
                           );
                         }
                       });
-
-
                     },
                     child: _isTapped
                         ? Container(
@@ -111,20 +123,24 @@ class _ChoosePlayerState extends State<ChoosePlayer> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: OLetter(
-                              outerItemColor: const Color.fromRGBO(255, 77, 77, 1),
-                              innerItemColor: const Color.fromRGBO(254, 202, 40, 1),
+                              outerItemColor:
+                                  const Color.fromRGBO(255, 77, 77, 1),
+                              innerItemColor:
+                                  const Color.fromRGBO(254, 202, 40, 1),
                             ))
                         : OLetter(
-                            outerItemColor: const Color.fromRGBO(254, 202, 40, 1),
-                            innerItemColor: const Color.fromRGBO(255, 77, 77, 1),
+                            outerItemColor:
+                                const Color.fromRGBO(74, 156, 199, 1),
+                            innerItemColor:
+                                const Color.fromRGBO(70, 97, 113, 1),
                           ),
                   ),
                 ),
               ),
             ],
           ),
-
-
+        ),
+      ],
     );
   }
 }

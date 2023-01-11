@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tic_tac_toe/splash_screen.dart';
 import 'package:tic_tac_toe/data/x_o_data_hub.dart';
-import 'package:tic_tac_toe/winner.dart';
+
+import 'front_screen.dart';
+
 
 
 void main() {
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
       child: const MaterialApp(
         title: 'Tic Tac Toe',
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
+        home: FrontScreen(),
       ),
     );
   }
