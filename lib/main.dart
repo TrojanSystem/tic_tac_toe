@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       child: const MaterialApp(
         title: 'Tic Tac Toe',
         debugShowCheckedModeBanner: false,
-        home: FrontScreen(),
+        home: SplashScreen(),
       ),
     );
   }

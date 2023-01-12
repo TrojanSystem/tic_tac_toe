@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tic_tac_toe/brain/choose_player.dart';
 import 'package:tic_tac_toe/brain/game_board.dart';
@@ -12,6 +13,12 @@ class FrontScreen extends StatefulWidget {
 }
 
 class _FrontScreenState extends State<FrontScreen> {
+  static Future<void> pop({bool? animated}) async {
+    await SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop', animated);
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final isLoaded = Provider.of<XOModelData>(context);
@@ -29,7 +36,8 @@ class _FrontScreenState extends State<FrontScreen> {
         ),
         Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: AppBar(automaticallyImplyLeading: false,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
@@ -57,10 +65,8 @@ class _FrontScreenState extends State<FrontScreen> {
                   ),
                   buildButtons(context, 'NEW GAME', 'NEW GAME', isLoaded),
                   gameData.isNotEmpty
-                      ?  buildButtons(
-                              context, 'CONTINUE', 'CONTINUE', isLoaded)
-                          : Container()
-                      ,
+                      ? buildButtons(context, 'CONTINUE', 'CONTINUE', isLoaded)
+                      : Container(),
                   buildButtons(context, 'EXIT', 'EXIT', isLoaded),
                 ],
               ),
@@ -81,14 +87,17 @@ class _FrontScreenState extends State<FrontScreen> {
               MaterialPageRoute(
                 builder: (ctx) => const ChoosePlayer(),
               ),
-            );
+            ); Provider.of<XOModelData>(context, listen: false)
+                .deleteXODataList();
           } else if (isNewGame == 'CONTINUE') {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (ctx) => GameBoard(turn: isLoaded.selectedSide),
               ),
             );
-          } else if (isNewGame == 'EXIT') {}
+          } else if (isNewGame == 'EXIT') {
+            pop();
+          }
         });
       },
       child: Container(

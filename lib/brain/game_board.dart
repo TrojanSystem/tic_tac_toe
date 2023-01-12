@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -21,6 +22,11 @@ class GameBoard extends StatefulWidget {
 }
 
 class _GameBoardState extends State<GameBoard> {
+  static Future<void> pop({bool? animated}) async {
+    await SystemChannels.platform
+        .invokeMethod<void>('SystemNavigator.pop', animated);
+  }
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -48,7 +54,7 @@ class _GameBoardState extends State<GameBoard> {
                         builder: (ctx) => const FrontScreen(),
                       ),
                     );
-                    Provider.of<XOModelData>(context,listen: false).loader();
+                    Provider.of<XOModelData>(context, listen: false).loader();
                   });
                 },
                 child: const Text('Yes'),
@@ -105,6 +111,7 @@ class _GameBoardState extends State<GameBoard> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
+          tooltip: 'Restart the game',
           onPressed: () {
             showDialog(
               context: context,
