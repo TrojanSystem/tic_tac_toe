@@ -214,12 +214,12 @@ class _GameBoardState extends State<GameBoard> {
                         gameData[char.indexOf(2)].playerSide == 'o' &&
                         gameData[char.indexOf(5)].playerSide == 'o' &&
                         gameData[char.indexOf(8)].playerSide == 'o') ||
-    (char.contains(1) &&
-    char.contains(4) &&
-    char.contains(7) &&
-    gameData[char.indexOf(1)].playerSide == 'o' &&
-    gameData[char.indexOf(4)].playerSide == 'o' &&
-    gameData[char.indexOf(7)].playerSide == 'o')||
+                    (char.contains(1) &&
+                        char.contains(4) &&
+                        char.contains(7) &&
+                        gameData[char.indexOf(1)].playerSide == 'o' &&
+                        gameData[char.indexOf(4)].playerSide == 'o' &&
+                        gameData[char.indexOf(7)].playerSide == 'o') ||
                     (char.contains(0) &&
                         char.contains(1) &&
                         char.contains(2) &&
@@ -255,12 +255,13 @@ class _GameBoardState extends State<GameBoard> {
                         char.contains(6) &&
                         gameData[char.indexOf(0)].playerSide == 'x' &&
                         gameData[char.indexOf(3)].playerSide == 'x' &&
-                        gameData[char.indexOf(6)].playerSide == 'x') || (char.contains(1) &&
-            char.contains(4) &&
-            char.contains(7) &&
-            gameData[char.indexOf(1)].playerSide == 'x' &&
-            gameData[char.indexOf(4)].playerSide == 'x' &&
-            gameData[char.indexOf(7)].playerSide == 'x')||
+                        gameData[char.indexOf(6)].playerSide == 'x') ||
+                    (char.contains(1) &&
+                        char.contains(4) &&
+                        char.contains(7) &&
+                        gameData[char.indexOf(1)].playerSide == 'x' &&
+                        gameData[char.indexOf(4)].playerSide == 'x' &&
+                        gameData[char.indexOf(7)].playerSide == 'x') ||
                     (char.contains(2) &&
                         char.contains(5) &&
                         char.contains(8) &&
